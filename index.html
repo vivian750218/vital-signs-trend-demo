@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生命徵象趨勢 — 陳明志</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal: #1FA891;
+  --teal-dark: #167A6A;
+  --teal-light: #E6F5F2;
+  --teal-mid: #5DCAA5;
+  --red: #E0453F;
+  --red-light: #FEF0EF;
+  --blue: #2F7FD4;
+  --blue-light: #EBF3FC;
+  --blue-mid: #84B8EC;
+  --amber: #B87213;
+  --amber-light: #FDF3E3;
+  --amber-mid: #F0A830;
+  --purple: #7B5EA7;
+  --purple-light: #F2EEF9;
+  --green: #2D9B5A;
+  --green-light: #EAF6EF;
+  --rose: #C44B7A;
+  --rose-light: #FCEEF4;
+  --slate: #4A6080;
+  --slate-light: #EEF2F7;
+  --gray-50: #F7F7F5;
+  --gray-100: #EFEEEA;
+  --gray-200: #E2E1DC;
+  --gray-400: #9A9892;
+  --gray-600: #6B6A65;
+  --gray-800: #2E2D2A;
+  --white: #FFFFFF;
+  --border: #E5E4DF;
+  --font: 'Noto Sans TC', sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --radius: 10px;
+}
+
+html, body {
+  font-family: var(--font);
+  background: var(--gray-50);
+  color: var(--gray-800);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Topbar ── */
+.topbar {
+  background: var(--teal);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.topbar-back {
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+.topbar-back:hover { background: rgba(255,255,255,0.14); }
+.topbar-crumb { color: rgba(255,255,255,0.65); font-size: 13px; }
+.topbar-sep { color: rgba(255,255,255,0.4); margin: 0 3px; font-size: 12px; }
+.topbar-name { color: white; font-size: 15px; font-weight: 500; }
+.topbar-tag {
+  margin-left: 2px;
+  background: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.9);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.topbar-icons { margin-left: auto; display: flex; gap: 4px; }
+.topbar-icon {
+  color: rgba(255,255,255,0.8);
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.topbar-icon:hover { background: rgba(255,255,255,0.14); }
+
+/* ── Page ── */
+.page { max-width: 1120px; margin: 0 auto; padding: 20px 20px 60px; }
+
+/* ── Patient strip ── */
+.patient-strip {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.patient-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--teal-light);
+  color: var(--teal-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 600;
+}
+.patient-info { flex: 1; }
+.patient-name { font-size: 15px; font-weight: 500; }
+.patient-meta { font-size: 12px; color: var(--gray-600); margin-top: 1px; }
+.patient-status {
+  font-size: 12px;
+  background: var(--teal-light);
+  color: var(--teal-dark);
+  border: 1px solid var(--teal-mid);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-weight: 500;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  background: var(--white);
+}
+.tab {
+  padding: 13px 4px;
+  margin-right: 24px;
+  font-size: 14px;
+  color: var(--gray-600);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s;
+  user-select: none;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--gray-800); }
+.tab.active { color: var(--teal); border-bottom-color: var(--teal); font-weight: 500; }
+
+/* ── Filter bar ── */
+.filter-bar {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  background: var(--gray-50);
+}
+.filter-label { font-size: 13px; color: var(--gray-600); }
+.date-pill {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-size: 13px;
+  color: var(--gray-800);
+  display: flex; align-items: center; gap: 5px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.date-pill:hover { border-color: var(--teal-mid); }
+.filter-range-btns {
+  display: flex; gap: 4px; margin-left: 8px;
+}
+.range-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--gray-600);
+  transition: all 0.15s;
+  user-select: none;
+}
+.range-btn:hover { background: var(--gray-100); }
+.range-btn.active {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+  font-weight: 500;
+}
+.filter-divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+.chips { display: flex; gap: 5px; flex-wrap: wrap; }
+.chip {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  color: var(--gray-600);
+  background: var(--white);
+  transition: all 0.15s;
+  user-select: none;
+}
+.chip:hover { border-color: var(--gray-400); color: var(--gray-800); }
+.chip.active {
+  font-weight: 500;
+}
+
+/* chip colors per metric */
+.chip[data-key="temp"].active     { background:#E6F5F2; border-color:#1FA891; color:#0E6A57; }
+.chip[data-key="pulse"].active    { background:#FDF3E3; border-color:#B87213; color:#7A4B0C; }
+.chip[data-key="breath"].active   { background:#EEF2F7; border-color:#4A6080; color:#2D4060; }
+.chip[data-key="sbp"].active      { background:#EBF3FC; border-color:#2F7FD4; color:#1A5598; }
+.chip[data-key="dbp"].active      { background:#EBF3FC; border-color:#84B8EC; color:#1A5598; }
+.chip[data-key="spo2"].active     { background:#EAF6EF; border-color:#2D9B5A; color:#1A6038; }
+.chip[data-key="pain"].active     { background:#FEF0EF; border-color:#E0453F; color:#A02020; }
+.chip[data-key="glucose"].active  { background:#F2EEF9; border-color:#7B5EA7; color:#4A3070; }
+.chip[data-key="weight"].active   { background:#FCEEF4; border-color:#C44B7A; color:#8A2050; }
+
+/* ── Chart panels ── */
+.charts { padding: 4px 0; }
+.chart-panel {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.chart-panel:last-child { border-bottom: none; }
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.chart-name { font-size: 13px; font-weight: 500; }
+.chart-unit { font-size: 11px; color: var(--gray-400); }
+.chart-latest {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin-left: 4px;
+}
+.anomaly-badge {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--red);
+  background: var(--red-light);
+  border: 1px solid #F9C5C4;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+.chart-wrap { position: relative; height: 120px; }
+canvas { display: block; }
+
+.chart-legend {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--gray-600);
+}
+.legend-line { width: 16px; height: 2px; border-radius: 1px; }
+.legend-line.dashed {
+  background: none;
+  border-top: 2px dashed var(--blue-mid);
+}
+.legend-swatch {
+  width: 11px; height: 9px;
+  border-radius: 2px;
+}
+
+/* glucose sub-chips */
+.glucose-sub {
+  display: flex; gap: 5px; margin-bottom: 8px; margin-top: 2px;
+}
+.sub-chip {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--gray-400);
+  transition: all 0.15s;
+  user-select: none;
+  font-weight: 400;
+}
+.sub-chip:hover { opacity: 0.85; }
+.sub-chip.pre        { border-color: #C4B0DE; color: #9A8AAE; }
+.sub-chip.pre.active { background: #7B5EA7; border-color: #7B5EA7; color: white; font-weight: 500; }
+.sub-chip.post        { border-color: #F2B8D4; color: #C490B0; }
+.sub-chip.post.active { background: #C44B7A; border-color: #C44B7A; color: white; font-weight: 500; }
+
+/* ── List pane ── */
+#pane-list { display: none; }
+.list-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.list-table th {
+  text-align: left; padding: 10px 14px;
+  font-size: 11px; font-weight: 500; color: var(--gray-400);
+  border-bottom: 1px solid var(--border);
+  background: var(--gray-50);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.list-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--gray-800);
+  white-space: nowrap;
+}
+.list-table tr:last-child td { border-bottom: none; }
+.list-table tr:hover td { background: var(--gray-50); cursor: pointer; }
+.val-red { color: var(--red); font-weight: 500; }
+.val-dim { color: var(--gray-400); }
+.note-tag {
+  font-size: 11px; color: var(--teal);
+  background: var(--teal-light); border-radius: 4px;
+  padding: 1px 6px; cursor: pointer;
+}
+
+/* ── No-data panel ── */
+.no-data {
+  height: 120px; display: flex; align-items: center; justify-content: center;
+  color: var(--gray-400); font-size: 13px; gap: 6px;
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <a class="topbar-back" href="#" title="返回列表">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  </a>
+  <span class="topbar-crumb">Jubo 生命徵象監測</span>
+  <span class="topbar-sep">›</span>
+  <span class="topbar-name">01 陳明志</span>
+  <span class="topbar-tag">追蹤中</span>
+  <div class="topbar-icons">
+    <div class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <div class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- Patient strip -->
+  <div class="patient-strip">
+    <div class="patient-avatar">陳</div>
+    <div class="patient-info">
+      <div class="patient-name">陳明志</div>
+      <div class="patient-meta">編號 01 · 建檔於 2025-03-10</div>
+    </div>
+    <div class="patient-status">追蹤觀察中</div>
+  </div>
+
+  <!-- Main card -->
+  <div class="card">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab" id="tab-list" onclick="switchTab('list')">紀錄列表</div>
+      <div class="tab active" id="tab-trend" onclick="switchTab('trend')">趨勢圖表</div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <span class="filter-label">期間</span>
+      <div class="filter-range-btns">
+        <div class="range-btn" onclick="setRange(7, this)">近一週</div>
+        <div class="range-btn active" onclick="setRange(30, this)">近一個月</div>
+        <div class="range-btn" onclick="setRange(90, this)">近三個月</div>
+      </div>
+      <div class="filter-divider"></div>
+      <span class="filter-label" id="date-from">2026-04-14</span>
+      <span class="filter-label">—</span>
+      <span class="filter-label" id="date-to">2026-05-14</span>
+      <div class="filter-divider"></div>
+      <div class="chips" id="chips">
+        <div class="chip active" data-key="temp">體溫</div>
+        <div class="chip active" data-key="pulse">脈搏</div>
+        <div class="chip active" data-key="breath">呼吸</div>
+        <div class="chip active" data-key="sbp">收縮壓</div>
+        <div class="chip active" data-key="dbp">舒張壓</div>
+        <div class="chip active" data-key="spo2">血氧</div>
+        <div class="chip" data-key="pain">疼痛</div>
+        <div class="chip active" data-key="glucose">血糖</div>
+        <div class="chip active" data-key="weight">體重</div>
+      </div>
+    </div>
+
+    <!-- Trend pane -->
+    <div id="pane-trend">
+      <div class="charts">
+
+        <!-- 體溫 -->
+        <div class="chart-panel" id="panel-temp">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#1FA891">體溫</span>
+            <span class="chart-unit">°C</span>
+            <span class="chart-latest" style="background:#E6F5F2;color:#0E6A57">最新 36.8°C</span>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-temp"></canvas></div>
+        </div>
+
+        <!-- 脈搏 -->
+        <div class="chart-panel" id="panel-pulse">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#B87213">脈搏</span>
+            <span class="chart-unit">次/分</span>
+            <span class="chart-latest" style="background:#FDF3E3;color:#7A4B0C">最新 69 次/分</span>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-pulse"></canvas></div>
+        </div>
+
+        <!-- 呼吸 -->
+        <div class="chart-panel" id="panel-breath">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#4A6080">呼吸</span>
+            <span class="chart-unit">次/分</span>
+            <span class="chart-latest" style="background:#EEF2F7;color:#2D4060">最新 16 次/分</span>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-breath"></canvas></div>
+        </div>
+
+        <!-- 血壓 -->
+        <div class="chart-panel" id="panel-sbp">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#2F7FD4">血壓</span>
+            <span class="chart-unit">mmHg</span>
+            <span class="chart-latest" style="background:#EBF3FC;color:#1A5598">最新 119 / 80</span>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-bp"></canvas></div>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-line" style="background:#2F7FD4"></div>收縮壓</div>
+            <div class="legend-item"><div class="legend-line dashed"></div>舒張壓</div>
+            <div class="legend-item">
+              <div class="legend-swatch" style="background:#EBF3FC;border:1px solid #84B8EC"></div>正常範圍
+            </div>
+          </div>
+        </div>
+
+        <!-- 血氧 -->
+        <div class="chart-panel" id="panel-spo2">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#2D9B5A">血氧</span>
+            <span class="chart-unit">%</span>
+            <span class="chart-latest" style="background:#EAF6EF;color:#1A6038">最新 98%</span>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-spo2"></canvas></div>
+        </div>
+
+        <!-- 疼痛（預設隱藏） -->
+        <div class="chart-panel" id="panel-pain" style="display:none">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#E0453F">疼痛</span>
+            <span class="chart-unit">0–10 分</span>
+            <span class="chart-latest" style="background:#FEF0EF;color:#A02020">最新 2 分</span>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-pain"></canvas></div>
+        </div>
+
+        <!-- 血糖 -->
+        <div class="chart-panel" id="panel-glucose">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#7B5EA7">血糖</span>
+            <span class="chart-unit">mg/dL</span>
+            <span class="chart-latest" style="background:#F2EEF9;color:#4A3070">最新 飯前 95 · 飯後 138</span>
+          </div>
+          <div class="glucose-sub">
+            <div class="sub-chip pre active" id="g-pre" onclick="toggleGlucoseSub('pre')">● 飯前血糖</div>
+            <div class="sub-chip post active" id="g-post" onclick="toggleGlucoseSub('post')">● 飯後血糖</div>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-glucose"></canvas></div>
+          <div class="chart-legend">
+            <div class="legend-item" id="leg-gpre"><div class="legend-line" style="background:#7B5EA7"></div>飯前</div>
+            <div class="legend-item" id="leg-gpost"><div class="legend-line" style="background:#C44B7A"></div>飯後</div>
+            <div class="legend-item">
+              <div class="legend-swatch" style="background:#F2EEF9;border:1px solid #C4B0DE"></div>正常範圍
+            </div>
+          </div>
+        </div>
+
+        <!-- 體重 -->
+        <div class="chart-panel" id="panel-weight">
+          <div class="chart-header">
+            <span class="chart-name" style="color:#C44B7A">體重</span>
+            <span class="chart-unit">kg</span>
+            <span class="chart-latest" style="background:#FCEEF4;color:#8A2050">最新 62.4 kg</span>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-weight"></canvas></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- List pane -->
+    <div id="pane-list">
+      <div style="overflow-x:auto">
+        <table class="list-table">
+          <thead>
+            <tr>
+              <th>日期</th><th>時間</th><th>體溫°C</th><th>脈搏</th><th>呼吸</th>
+              <th>收縮壓</th><th>舒張壓</th><th>血氧%</th><th>疼痛</th>
+              <th>飯前血糖</th><th>飯後血糖</th><th>體重kg</th><th>備註</th>
+            </tr>
+          </thead>
+          <tbody id="list-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ── Mock data ── */
+function genData() {
+  const rows = [];
+  const now = new Date('2026-05-14');
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(now);
+    d.offsetDay = i;
+    d.setDate(d.getDate() - i);
+    const ds = d.toISOString().slice(0,10);
+    // morning
+    rows.push({
+      date: ds, time: '08:' + String(20 + Math.floor(Math.random()*20)).padStart(2,'0'),
+      temp: (36.2 + Math.random()*0.9).toFixed(1),
+      pulse: Math.round(62 + Math.random()*20),
+      breath: Math.round(14 + Math.random()*5),
+      sbp: Math.round(112 + Math.random()*18),
+      dbp: Math.round(70 + Math.random()*16),
+      spo2: Math.round(96 + Math.random()*3),
+      pain: Math.random() > 0.7 ? Math.round(Math.random()*4) : 0,
+      glucose_pre: Math.round(88 + Math.random()*22),
+      glucose_post: Math.round(120 + Math.random()*40),
+      weight: (61.5 + Math.random()*1.5).toFixed(1),
+      note: ''
+    });
+  }
+  // inject a couple anomalies
+  rows[5].temp = '38.6';
+  rows[5].note = '發燒追蹤';
+  rows[18].sbp = 158;
+  rows[18].note = '血壓偏高';
+  rows[22].glucose_post = 210;
+  rows[22].note = '飯後血糖偏高';
+  return rows;
+}
+const DATA = genData();
+
+/* ── Helpers ── */
+function switchTab(tab) {
+  document.getElementById('tab-list').classList.toggle('active', tab==='list');
+  document.getElementById('tab-trend').classList.toggle('active', tab==='trend');
+  document.getElementById('pane-list').style.display = tab==='list' ? 'block' : 'none';
+  document.getElementById('pane-trend').style.display = tab==='trend' ? 'block' : 'none';
+  if (tab === 'list') buildList();
+}
+
+function setRange(days, btn) {
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const to = new Date('2026-05-14');
+  const from = new Date(to); from.setDate(from.getDate() - days + 1);
+  document.getElementById('date-from').textContent = from.toISOString().slice(0,10);
+  document.getElementById('date-to').textContent = to.toISOString().slice(0,10);
+  drawAllCharts();
+}
+
+// Chips
+document.getElementById('chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  chip.classList.toggle('active');
+  const key = chip.dataset.key;
+  // blood pressure chips share one panel
+  const panelKey = (key === 'dbp') ? 'sbp' : key;
+  const panel = document.getElementById('panel-' + panelKey);
+  if (panel) {
+    // check if sbp or dbp is active
+    if (panelKey === 'sbp') {
+      const sbpOn = document.querySelector('.chip[data-key="sbp"]').classList.contains('active');
+      const dbpOn = document.querySelector('.chip[data-key="dbp"]').classList.contains('active');
+      panel.style.display = (sbpOn || dbpOn) ? 'block' : 'none';
+    } else {
+      panel.style.display = chip.classList.contains('active') ? 'block' : 'none';
+    }
+  }
+  drawAllCharts();
+});
+
+let glucoseShowPre = true, glucoseShowPost = true;
+function toggleGlucoseSub(which) {
+  if (which === 'pre') {
+    glucoseShowPre = !glucoseShowPre;
+    document.getElementById('g-pre').classList.toggle('active', glucoseShowPre);
+    document.getElementById('leg-gpre').style.opacity = glucoseShowPre ? '1' : '0.3';
+  } else {
+    glucoseShowPost = !glucoseShowPost;
+    document.getElementById('g-post').classList.toggle('active', glucoseShowPost);
+    document.getElementById('leg-gpost').style.opacity = glucoseShowPost ? '1' : '0.3';
+  }
+  drawChart_glucose();
+}
+
+/* ── Canvas drawing ── */
+function getCanvasCtx(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return null;
+  const wrap = canvas.parentElement;
+  const dpr = window.devicePixelRatio || 1;
+  const W = wrap.clientWidth;
+  const H = wrap.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx, W, H };
+}
+
+function drawLineChart(id, opts) {
+  const r = getCanvasCtx(id);
+  if (!r) return;
+  const { ctx, W, H } = r;
+  const PAD = { top: 10, right: 16, bottom: 30, left: 42 };
+  const cW = W - PAD.left - PAD.right;
+  const cH = H - PAD.top - PAD.bottom;
+
+  const allVals = opts.series.flatMap(s => s.data.map(p => p.v));
+  let minV = opts.minV !== undefined ? opts.minV : Math.min(...allVals) * 0.9;
+  let maxV = opts.maxV !== undefined ? opts.maxV : Math.max(...allVals) * 1.05;
+  const range = maxV - minV || 1;
+
+  function toXY(p) {
+    const xFrac = (p.x - opts.xMin) / (opts.xMax - opts.xMin || 1);
+    const yFrac = (p.v - minV) / range;
+    return [PAD.left + xFrac * cW, PAD.top + cH * (1 - yFrac)];
+  }
+
+  // band
+  if (opts.band) {
+    const [lo, hi] = opts.band;
+    const by0 = PAD.top + cH * (1 - (hi - minV) / range);
+    const by1 = PAD.top + cH * (1 - (lo - minV) / range);
+    ctx.fillStyle = opts.bandColor;
+    ctx.fillRect(PAD.left, by0, cW, by1 - by0);
+    ctx.save();
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = opts.bandBorder;
+    ctx.lineWidth = 0.7;
+    [by0, by1].forEach(y => {
+      ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cW, y); ctx.stroke();
+    });
+    ctx.restore();
+  }
+
+  // Y grid + labels
+  const steps = 3;
+  ctx.font = '10px "Noto Sans TC", sans-serif';
+  ctx.fillStyle = '#9A9892';
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= steps; i++) {
+    const v = minV + (range * i / steps);
+    const y = PAD.top + cH * (1 - i / steps);
+    ctx.save();
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = '#E5E4DF';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cW, y); ctx.stroke();
+    ctx.restore();
+    ctx.fillText(Math.round(v), PAD.left - 6, y + 4);
+  }
+
+  // X axis ticks (month view: every 5 days)
+  if (opts.xTicks) {
+    ctx.font = '10px "Noto Sans TC", sans-serif';
+    ctx.fillStyle = '#9A9892';
+    ctx.textAlign = 'center';
+    opts.xTicks.forEach(t => {
+      const xFrac = (t.x - opts.xMin) / (opts.xMax - opts.xMin || 1);
+      const x = PAD.left + xFrac * cW;
+      ctx.fillText(t.label, x, H - PAD.bottom + 16);
+    });
+  }
+
+  // lines + dots
+  opts.series.forEach(s => {
+    if (s.hidden) return;
+    const coords = s.data.map(p => ({ xy: toXY(p), ...p }));
+    ctx.save();
+    if (s.dashed) ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = 1.8;
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.beginPath();
+    coords.forEach((c, i) => i === 0 ? ctx.moveTo(...c.xy) : ctx.lineTo(...c.xy));
+    ctx.stroke();
+    ctx.restore();
+
+    coords.forEach(c => {
+      const isAnomaly = opts.anomalyCheck && opts.anomalyCheck(c.v);
+      ctx.beginPath();
+      ctx.arc(c.xy[0], c.xy[1], isAnomaly ? 5 : 3, 0, Math.PI * 2);
+      ctx.fillStyle = isAnomaly ? '#E0453F' : s.color;
+      ctx.fill();
+      if (isAnomaly) {
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+      }
+    });
+  });
+}
+
+/* ── Chart definitions ── */
+function getFilteredData(days) {
+  const fromEl = document.getElementById('date-from').textContent;
+  const from = new Date(fromEl);
+  return DATA.filter(r => new Date(r.date) >= from);
+}
+
+function dateToX(d) { return new Date(d).getTime() / 86400000; }
+
+function getXRange(data) {
+  const xs = data.map(r => dateToX(r.date));
+  return { xMin: Math.min(...xs), xMax: Math.max(...xs) };
+}
+
+function makeXTicks(xMin, xMax) {
+  const ticks = [];
+  const span = xMax - xMin;
+  const step = span > 20 ? 7 : span > 10 ? 5 : 3;
+  for (let x = Math.ceil(xMin); x <= xMax; x += step) {
+    const d = new Date(x * 86400000);
+    ticks.push({ x, label: `${d.getMonth()+1}/${d.getDate()}` });
+  }
+  return ticks;
+}
+
+function drawAllCharts() {
+  const data = getFilteredData();
+  const { xMin, xMax } = getXRange(data);
+  const xTicks = makeXTicks(xMin, xMax);
+
+  // temp
+  drawLineChart('chart-temp', {
+    xMin, xMax, xTicks,
+    minV: 35.5, maxV: 40,
+    band: [36, 37.5], bandColor: 'rgba(230,245,242,0.7)', bandBorder: '#5DCAA5',
+    anomalyCheck: v => v > 37.5,
+    series: [{ color: '#1FA891', data: data.map(r => ({ x: dateToX(r.date), v: +r.temp })) }]
+  });
+
+  drawLineChart('chart-pulse', {
+    xMin, xMax, xTicks,
+    minV: 50, maxV: 110,
+    band: [60, 100], bandColor: 'rgba(253,243,227,0.6)', bandBorder: '#F0A830',
+    series: [{ color: '#B87213', data: data.map(r => ({ x: dateToX(r.date), v: r.pulse })) }]
+  });
+
+  drawLineChart('chart-breath', {
+    xMin, xMax, xTicks,
+    minV: 10, maxV: 25,
+    band: [12, 20], bandColor: 'rgba(238,242,247,0.6)', bandBorder: '#7A90AC',
+    series: [{ color: '#4A6080', data: data.map(r => ({ x: dateToX(r.date), v: r.breath })) }]
+  });
+
+  const sbpOn = document.querySelector('.chip[data-key="sbp"]').classList.contains('active');
+  const dbpOn = document.querySelector('.chip[data-key="dbp"]').classList.contains('active');
+  drawLineChart('chart-bp', {
+    xMin, xMax, xTicks,
+    minV: 55, maxV: 165,
+    band: [90, 140], bandColor: 'rgba(235,243,252,0.55)', bandBorder: '#84B8EC',
+    series: [
+      { color: '#2F7FD4', hidden: !sbpOn, data: data.map(r => ({ x: dateToX(r.date), v: r.sbp })) },
+      { color: '#84B8EC', dashed: true, hidden: !dbpOn, data: data.map(r => ({ x: dateToX(r.date), v: r.dbp })) }
+    ],
+    anomalyCheck: v => v > 140
+  });
+
+  drawLineChart('chart-spo2', {
+    xMin, xMax, xTicks,
+    minV: 92, maxV: 101,
+    band: [95, 100], bandColor: 'rgba(234,246,239,0.6)', bandBorder: '#6DC98E',
+    anomalyCheck: v => v < 95,
+    series: [{ color: '#2D9B5A', data: data.map(r => ({ x: dateToX(r.date), v: r.spo2 })) }]
+  });
+
+  drawLineChart('chart-pain', {
+    xMin, xMax, xTicks,
+    minV: 0, maxV: 10,
+    series: [{ color: '#E0453F', data: data.map(r => ({ x: dateToX(r.date), v: r.pain })) }]
+  });
+
+  drawChart_glucose();
+
+  drawLineChart('chart-weight', {
+    xMin, xMax, xTicks,
+    series: [{ color: '#C44B7A', data: data.map(r => ({ x: dateToX(r.date), v: +r.weight })) }]
+  });
+}
+
+function drawChart_glucose() {
+  const data = getFilteredData();
+  const { xMin, xMax } = getXRange(data);
+  const xTicks = makeXTicks(xMin, xMax);
+  drawLineChart('chart-glucose', {
+    xMin, xMax, xTicks,
+    minV: 70, maxV: 230,
+    band: [70, 140], bandColor: 'rgba(242,238,249,0.5)', bandBorder: '#C29DE0',
+    anomalyCheck: v => v > 180,
+    series: [
+      { color: '#7B5EA7', hidden: !glucoseShowPre, data: data.map(r => ({ x: dateToX(r.date), v: r.glucose_pre })) },
+      { color: '#C44B7A', hidden: !glucoseShowPost, data: data.map(r => ({ x: dateToX(r.date), v: r.glucose_post })) }
+    ]
+  });
+}
+
+/* ── List ── */
+function buildList() {
+  const data = getFilteredData();
+  const tbody = document.getElementById('list-body');
+  tbody.innerHTML = [...data].reverse().map(r => `
+    <tr>
+      <td>${r.date}</td><td style="color:var(--gray-600)">${r.time}</td>
+      <td class="${+r.temp>37.5?'val-red':''}">${r.temp}</td>
+      <td>${r.pulse}</td><td>${r.breath}</td>
+      <td class="${r.sbp>140?'val-red':''}">${r.sbp}</td>
+      <td>${r.dbp}</td>
+      <td class="${r.spo2<95?'val-red':''}">${r.spo2}</td>
+      <td>${r.pain || '<span class="val-dim">0</span>'}</td>
+      <td>${r.glucose_pre}</td>
+      <td class="${r.glucose_post>180?'val-red':''}">${r.glucose_post}</td>
+      <td>${r.weight}</td>
+      <td>${r.note ? `<span class="note-tag">${r.note}</span>` : ''}</td>
+    </tr>
+  `).join('');
+}
+
+window.addEventListener('load', () => { drawAllCharts(); });
+window.addEventListener('resize', () => { drawAllCharts(); });
+</script>
+</body>
+</html>
