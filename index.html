@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生命徵象 — 李林甘</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal: #1FA891;
+    --teal-mid: #5DCAA5;
+    --teal-light: #E8F7F3;
+    --red: #E0453F;
+    --red-light: #FEF0EF;
+    --blue: #2F7FD4;
+    --blue-mid: #84B8EC;
+    --blue-light: #EBF3FC;
+    --amber: #B87213;
+    --amber-light: #FDF3E3;
+    --gray-50: #F8F8F6;
+    --gray-100: #F0EFEB;
+    --gray-200: #E2E1DC;
+    --gray-400: #9A9892;
+    --gray-600: #6B6A65;
+    --gray-800: #2E2D2A;
+    --white: #FFFFFF;
+    --border: #E5E4DF;
+    --font: 'Noto Sans TC', 'DM Sans', sans-serif;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  html, body {
+    font-family: var(--font);
+    background: var(--gray-50);
+    color: var(--gray-800);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    background: var(--teal);
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-back {
+    color: rgba(255,255,255,0.8);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+  .topbar-back:hover { background: rgba(255,255,255,0.12); }
+  .topbar-crumb {
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+  }
+  .topbar-title {
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .topbar-crumb svg, .topbar-sep { color: rgba(255,255,255,0.5); margin: 0 2px; }
+
+  /* ── Main layout ── */
+  .page { max-width: 1100px; margin: 0 auto; padding: 0 24px 48px; }
+
+  /* ── Card ── */
+  .card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    background: var(--white);
+  }
+  .tab {
+    padding: 14px 4px;
+    margin-right: 28px;
+    font-size: 14px;
+    color: var(--gray-600);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--gray-800); }
+  .tab.active {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+    font-weight: 500;
+  }
+
+  /* ── Filter bar ── */
+  .filter-bar {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--gray-50);
+  }
+  .filter-label { font-size: 13px; color: var(--gray-600); }
+  .date-pill {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-size: 13px;
+    color: var(--gray-800);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .date-pill svg { color: var(--gray-400); }
+  .filter-sep { color: var(--gray-400); font-size: 13px; margin: 0 2px; }
+  .chips { display: flex; gap: 6px; margin-left: 8px; flex-wrap: wrap; }
+  .chip {
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--gray-600);
+    background: var(--white);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--teal-mid); color: var(--gray-800); }
+  .chip.active {
+    background: var(--teal-light);
+    border-color: var(--teal);
+    color: #0E6A57;
+    font-weight: 500;
+  }
+
+  /* ── Chart panels ── */
+  .charts { padding: 0; }
+  .chart-panel {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    transition: opacity 0.2s;
+  }
+  .chart-panel:last-child { border-bottom: none; }
+  .chart-header {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .chart-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-800);
+  }
+  .chart-unit {
+    font-size: 12px;
+    color: var(--gray-400);
+    font-weight: 300;
+  }
+  .anomaly-badge {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--red);
+    background: var(--red-light);
+    border: 1px solid #F9C5C4;
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 130px;
+  }
+  canvas { display: block; }
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--gray-600);
+  }
+  .legend-line {
+    width: 18px;
+    height: 2px;
+    border-radius: 1px;
+  }
+  .legend-line.dashed {
+    background: repeating-linear-gradient(to right, var(--blue-mid) 0, var(--blue-mid) 5px, transparent 5px, transparent 8px);
+    height: 2px;
+  }
+  .legend-swatch {
+    width: 12px;
+    height: 10px;
+    border-radius: 2px;
+    border: 1px solid var(--blue-mid);
+    background: var(--blue-light);
+  }
+
+  /* list pane */
+  #pane-list { display: none; }
+  .list-table { width: 100%; border-collapse: collapse; }
+  .list-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-400);
+    border-bottom: 1px solid var(--border);
+    background: var(--gray-50);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .list-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    color: var(--gray-800);
+  }
+  .list-table tr:last-child td { border-bottom: none; }
+  .list-table tr:hover td { background: var(--gray-50); }
+  .anomaly-val { color: var(--red); font-weight: 500; }
+  .note-link { color: var(--teal); font-size: 12px; cursor: pointer; }
+
+  .page-header {
+    padding: 20px 0 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-back" href="#">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  </a>
+  <span class="topbar-crumb">生命徵象</span>
+  <span class="topbar-crumb" style="margin:0 2px;">›</span>
+  <span class="topbar-title">[1]-000 李林甘</span>
+</div>
+
+<div class="page">
+  <div class="page-header">個人 生命徵象列表</div>
+
+  <div class="card">
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab" id="tab-list" onclick="switchTab('list')">紀錄列表</div>
+      <div class="tab active" id="tab-trend" onclick="switchTab('trend')">趨勢圖表</div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <span class="filter-label">所有狀態</span>
+      <span class="filter-sep">·</span>
+      <span class="filter-label">從</span>
+      <div class="date-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        2026-04-12
+      </div>
+      <span class="filter-label">到</span>
+      <div class="date-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        2026-05-12
+      </div>
+      <div class="chips" id="chips">
+        <div class="chip active" data-key="temp">體溫</div>
+        <div class="chip active" data-key="bp">血壓</div>
+        <div class="chip active" data-key="pulse">脈搏</div>
+        <div class="chip" data-key="breath">呼吸</div>
+        <div class="chip" data-key="spo2">血氧</div>
+      </div>
+    </div>
+
+    <!-- Trend pane -->
+    <div id="pane-trend">
+      <div class="charts">
+
+        <!-- Temperature -->
+        <div class="chart-panel" id="panel-temp">
+          <div class="chart-header">
+            <span class="chart-name">體溫</span>
+            <span class="chart-unit">°C</span>
+            <div class="anomaly-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              04-22 異常值 100°C
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chart-temp"></canvas>
+          </div>
+        </div>
+
+        <!-- Blood pressure -->
+        <div class="chart-panel" id="panel-bp">
+          <div class="chart-header">
+            <span class="chart-name">血壓</span>
+            <span class="chart-unit">mmHg</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chart-bp"></canvas>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-line" style="background:#2F7FD4"></div>
+              收縮壓
+            </div>
+            <div class="legend-item">
+              <div class="legend-line dashed"></div>
+              舒張壓
+            </div>
+            <div class="legend-item">
+              <div class="legend-swatch"></div>
+              正常範圍
+            </div>
+          </div>
+        </div>
+
+        <!-- Pulse -->
+        <div class="chart-panel" id="panel-pulse">
+          <div class="chart-header">
+            <span class="chart-name">脈搏</span>
+            <span class="chart-unit">次/分</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chart-pulse"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- List pane -->
+    <div id="pane-list">
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>日期</th><th>時間</th><th>體溫 °C</th><th>脈搏 次/分</th><th>呼吸 次/分</th><th>血壓 mmHg</th><th>血氧 %</th><th>紀錄</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>04-22</td><td style="color:var(--gray-600)">10:53</td>
+            <td class="anomaly-val">100</td>
+            <td style="color:var(--gray-400)">—</td><td style="color:var(--gray-400)">—</td>
+            <td style="color:var(--gray-400)">—</td><td style="color:var(--gray-400)">—</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>04-16</td><td style="color:var(--gray-600)">16:24</td>
+            <td>36.9</td><td>80</td><td style="color:var(--gray-400)">—</td>
+            <td>116 / 74</td><td style="color:var(--gray-400)">—</td>
+            <td><span class="note-link">QA測試帳號…</span></td>
+          </tr>
+          <tr>
+            <td>04-16</td><td style="color:var(--gray-600)">12:29</td>
+            <td>36.5</td><td>70</td><td>16</td>
+            <td>130 / 80</td><td>100</td>
+            <td><span class="note-link">沈測試</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Helpers ── */
+function switchTab(tab) {
+  document.getElementById('tab-list').classList.toggle('active', tab === 'list');
+  document.getElementById('tab-trend').classList.toggle('active', tab === 'trend');
+  document.getElementById('pane-list').style.display = tab === 'list' ? 'block' : 'none';
+  document.getElementById('pane-trend').style.display = tab === 'trend' ? 'block' : 'none';
+}
+
+document.getElementById('chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  chip.classList.toggle('active');
+  const key = chip.dataset.key;
+  const panel = document.getElementById('panel-' + key);
+  if (panel) panel.style.display = chip.classList.contains('active') ? 'block' : 'none';
+});
+
+/* ── Canvas chart renderer ── */
+function drawChart(canvasId, opts) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const wrap = canvas.parentElement;
+  const dpr = window.devicePixelRatio || 1;
+  const W = wrap.clientWidth;
+  const H = wrap.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const PAD = { top: 12, right: 20, bottom: 36, left: 46 };
+  const cW = W - PAD.left - PAD.right;
+  const cH = H - PAD.top - PAD.bottom;
+
+  // normal range band
+  if (opts.band) {
+    const [lo, hi] = opts.band;
+    const by0 = PAD.top + cH * (1 - hi);
+    const by1 = PAD.top + cH * (1 - lo);
+    ctx.fillStyle = opts.bandColor || 'rgba(235,243,252,0.6)';
+    ctx.fillRect(PAD.left, by0, cW, by1 - by0);
+    // dashed borders
+    ctx.save();
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = opts.bandBorder || '#84B8EC';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.moveTo(PAD.left, by0); ctx.lineTo(PAD.left + cW, by0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD.left, by1); ctx.lineTo(PAD.left + cW, by1); ctx.stroke();
+    ctx.restore();
+  }
+
+  // Y axis labels
+  if (opts.yLabels) {
+    ctx.font = '11px "Noto Sans TC", sans-serif';
+    ctx.fillStyle = '#9A9892';
+    ctx.textAlign = 'right';
+    opts.yLabels.forEach(([label, pct]) => {
+      const y = PAD.top + cH * (1 - pct);
+      ctx.fillText(label, PAD.left - 8, y + 4);
+      ctx.save();
+      ctx.setLineDash([3, 4]);
+      ctx.strokeStyle = '#E5E4DF';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cW, y); ctx.stroke();
+      ctx.restore();
+    });
+  }
+
+  function toXY(pt) {
+    return [PAD.left + pt[0] * cW, PAD.top + cH * (1 - pt[1])];
+  }
+
+  // lines
+  opts.series.forEach(s => {
+    const coords = s.points.map(toXY);
+    ctx.save();
+    if (s.dashed) ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    coords.forEach((c, i) => i === 0 ? ctx.moveTo(...c) : ctx.lineTo(...c));
+    ctx.stroke();
+    ctx.restore();
+
+    // dots
+    coords.forEach((c, i) => {
+      const isAnomaly = s.anomalyIdx === i;
+      ctx.beginPath();
+      ctx.arc(c[0], c[1], isAnomaly ? 6 : 4, 0, Math.PI * 2);
+      ctx.fillStyle = isAnomaly ? '#E0453F' : s.color;
+      ctx.fill();
+      if (isAnomaly) {
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    });
+  });
+
+  // X labels
+  if (opts.xLabels) {
+    ctx.font = '11px "Noto Sans TC", sans-serif';
+    ctx.textAlign = 'center';
+    opts.xLabels.forEach(([label, xFrac, isRed]) => {
+      ctx.fillStyle = isRed ? '#E0453F' : '#9A9892';
+      ctx.font = isRed ? 'bold 11px "Noto Sans TC", sans-serif' : '11px "Noto Sans TC", sans-serif';
+      ctx.fillText(label, PAD.left + xFrac * cW, H - PAD.bottom + 18);
+    });
+  }
+}
+
+function initCharts() {
+  // Temperature
+  drawChart('chart-temp', {
+    band: [0.22, 0.76],
+    bandColor: 'rgba(232,247,243,0.7)',
+    bandBorder: '#5DCAA5',
+    yLabels: [[38, 0.88], [37, 0.55], [36, 0.22]],
+    series: [{
+      color: '#1FA891',
+      points: [[0.12, 0.40], [0.46, 0.46], [0.87, 0.97]],
+      anomalyIdx: 2
+    }],
+    xLabels: [['04-16 12:29', 0.12, false], ['04-16 16:24', 0.46, false], ['04-22 10:53', 0.87, true]]
+  });
+
+  // Blood pressure
+  drawChart('chart-bp', {
+    band: [0.18, 0.78],
+    bandColor: 'rgba(235,243,252,0.6)',
+    bandBorder: '#84B8EC',
+    yLabels: [[140, 0.90], [120, 0.62], [90, 0.22]],
+    series: [
+      { color: '#2F7FD4', points: [[0.18, 0.68], [0.50, 0.55]] },
+      { color: '#84B8EC', dashed: true, points: [[0.18, 0.34], [0.50, 0.26]] }
+    ],
+    xLabels: [['04-16 12:29', 0.18, false], ['04-16 16:24', 0.50, false]]
+  });
+
+  // Pulse
+  drawChart('chart-pulse', {
+    band: [0.20, 0.82],
+    bandColor: 'rgba(253,243,227,0.6)',
+    bandBorder: '#FAC775',
+    yLabels: [[100, 0.88], [80, 0.58], [60, 0.28]],
+    series: [
+      { color: '#B87213', points: [[0.18, 0.38], [0.50, 0.62]] }
+    ],
+    xLabels: [['04-16 12:29', 0.18, false], ['04-16 16:24', 0.50, false]]
+  });
+}
+
+window.addEventListener('load', initCharts);
+window.addEventListener('resize', initCharts);
+</script>
+</body>
+</html>
